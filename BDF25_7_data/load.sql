@@ -1,0 +1,12 @@
+COPY customers FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//customers.parquet' (FORMAT 'parquet');
+COPY customer_orders FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//customer_orders.parquet' (FORMAT 'parquet');
+COPY joined_table FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//joined_table.parquet' (FORMAT 'parquet');
+COPY links FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//links.parquet' (FORMAT 'parquet');
+COPY movies FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//movies.parquet' (FORMAT 'parquet');
+COPY movies_year FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//movies_year.parquet' (FORMAT 'parquet');
+COPY movie_ratings FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//movie_ratings.parquet' (FORMAT 'parquet');
+COPY orders FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//orders.parquet' (FORMAT 'parquet');
+COPY ratings FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//ratings.parquet' (FORMAT 'parquet');
+COPY summary_table FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//summary_table.parquet' (FORMAT 'parquet');
+COPY tags FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//tags.parquet' (FORMAT 'parquet');
+COPY user_ratings FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data Foundations/Project/BDF25_7_data//user_ratings.parquet' (FORMAT 'parquet');

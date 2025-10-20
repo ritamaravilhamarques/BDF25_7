@@ -1,0 +1,31 @@
+The objectives of the project are the following:
+• Becoming familiar with a scalable dataset that can start small and grow to be really big (yet, manageable with limited hardware)
+• Becoming familiar with tools that can help analysing such a dataset
+Based initially on the 100K MovieLens Dataset, get to know the dataset and start asking some questions that you might find interesting. Once comfortable, you can scale up to the 32M dataset (see below). (Even for the MovieLens 1B).
+
+Some possible questions
+• What are the movie genres in the dataset?
+• What is the number of movies per genre?
+• What is the movie rating distribution per user?
+• What are the movies with the highest average rating?
+The more interesting the questions, the deeper the answers.
+
+You can start small and grow to larger versions of the dataset (available in https://grouplens.org/datasets/movielens)
+You can, at least, use DuckDB and/or a cloud store (for sure) and you can also explore Amazon Athena.
+
+Feel free to use any visualization tool to present your insights.
+
+All the complementary information that you feel it is important, should be put into background slides. The total number of slides, the ones used for presentation and the ones used for background info should not exceed 30 (hopefully, less than that).
+• The slides should be delivered in PDF format, through Moodle.
+• (Don’t forget, to identify, to put your names and numbers in each deliverable).
+
+You should submit a status report in Moodle at Week8
+• The status report is the answer to a short questionnaire
+• Basically, to understand what is the status of the project and assess any difficulties you might have
+
+The delivery will be through Moodle
+• You should upload your Presentation as PDF, well as any scripts, in one .ZIP file, if possible
+• The name of the .ZIP file should include the letter of the group. For exemple, for groupC, it should be, BDF24GroupC.zip
+• Also in the.zip, a .CSV, with the name of the group, the student number and the name of each student of the group. The name of the .CSV is, simply, as in the previous exemple: GroupC.csv
+• Columns of the .CSV:
+• group letter, student number, student name

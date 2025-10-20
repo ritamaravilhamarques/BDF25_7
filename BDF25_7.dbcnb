@@ -1,0 +1,351 @@
+cells:
+  - kind: 1
+    languageId: markdown
+    value: "We're trying to answer the following:\r
+
+      1) what is the number of movies per genre?\r
+
+      2) what are the movies with the largest average rating?\r
+
+      3) what is the movie rating distribution per user?\r
+
+      4) what is the year with the best movie ratings?\r
+
+      5) do older films have longer and more nostalgic comments?"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "# Import Datasets"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "/* First we'll import the MovieLens small datasets: links, movies,
+      ratings and tags\r
+
+      Here is where you can find them:
+      https://grouplens.org/datasets/movielens/\r
+
+      the small one:
+      https://files.grouplens.org/datasets/movielens/ml-latest-small.zip\r
+
+      extract the zip and replace the paths where needed */\r
+
+      \r
+
+      CREATE OR REPLACE TABLE links AS\r
+
+      SELECT *\r
+
+      FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/ml-latest-small/links.csv';\r
+
+      \r
+
+      SELECT *\r
+
+      FROM links\r
+
+      LIMIT 10;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "CREATE OR REPLACE TABLE movies AS\r
+
+      SELECT *\r
+
+      FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/ml-latest-small/movies.csv';\r
+
+      \r
+
+      SELECT *\r
+
+      FROM movies\r
+
+      LIMIT 10;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "CREATE OR REPLACE TABLE ratings AS\r
+
+      SELECT *\r
+
+      FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/ml-latest-small/ratings.csv';\r
+
+      \r
+
+      SELECT *\r
+
+      FROM ratings\r
+
+      LIMIT 10;"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "# 1. Number of Movies per genre"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What are the movie genres in the dataset?\r
+
+      SELECT DISTINCT genre -- distinct removes duplicates\r
+
+      FROM (\r
+
+      \    SELECT unnest(string_split(genres, '|')) AS genre \r
+
+      \    -- string_split turns \"Action|Comedy\" into an array ['Action',
+      'Comedy']\r
+
+      \    -- unnest explodes that array into separate rows\r
+
+      \    FROM movies\r
+
+      )\r
+
+      ORDER BY genre;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What is the number of movies per genre?\r
+
+      SELECT genre, COUNT(*) AS movie_count -- count counts how many movies
+      belong to each genre\r
+
+      FROM (\r
+
+      \    SELECT unnest(string_split(genres, '|')) AS genre\r
+
+      \    FROM movies\r
+
+      )\r
+
+      GROUP BY genre -- groups all rows by genre\r
+
+      ORDER BY movie_count DESC; -- shows most common genres first"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "# 2. Numbers with the largest average rating"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What are the movies with the largest average rating?\r
+
+      CREATE OR REPLACE TABLE movie_ratings AS -- let's create a table with the
+      average movie ratings\r
+
+      SELECT movieID, AVG(rating) AS average_rating -- get movie id, and average
+      rating\r
+
+      FROM ratings\r
+
+      GROUP BY movieId -- group by the movie\r
+
+      ORDER BY average_rating; -- order by the average rating\r
+
+      \r
+
+      SELECT * FROM movie_ratings; -- see the table\r
+
+      \r
+
+      -- now, to get the titles we need the table movies\r
+
+      SELECT movie_ratings.movieId, movies.title, movie_ratings.average_rating\r
+
+      FROM movie_ratings\r
+
+      LEFT JOIN movies -- left join to keep all the records from movie_ratings,
+      and simply add the title from movies\r
+
+      ON movie_ratings.movieId = movies.movieID\r
+
+      ORDER BY average_rating DESC; -- get the best rated movies first"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- since there are many movies with the maximum rating, we could just
+      limit the results to those with max rating instead.\r
+
+      SELECT movie_ratings.movieId, movies.title, movie_ratings.average_rating\r
+
+      FROM movie_ratings\r
+
+      LEFT JOIN movies -- left join to keep all the records from movie_ratings,
+      and simply add the title from movies\r
+
+      ON movie_ratings.movieId = movies.movieID\r
+
+      WHERE movie_ratings.average_rating = 5;"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "# 3. Movie rating distribution per user"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What is the movie rating distribution per user?\r
+
+      CREATE OR REPLACE TABLE user_ratings AS\r
+
+      SELECT userID, COUNT(*) AS number_of_ratings, AVG(rating) AS
+      average_rating, stddev_samp(rating) AS standard_deviation_rating\r
+
+      FROM ratings\r
+
+      GROUP BY userId\r
+
+      ORDER BY userId;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: SELECT * FROM user_ratings;
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "# 4. What is the year with the best movies"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- create a new table with movie_title and year extracted reliably\r
+
+      CREATE OR REPLACE TABLE movies_year AS\r
+
+      SELECT\r
+
+      \    movieId,\r
+
+      \    title,\r
+
+      \    -- movie title = all chars up to the char before the last '(' ; rtrim
+      removes trailing spaces\r
+
+      \    rtrim(substr(title, 1, length(title) - position('(' IN
+      reverse(title)))) AS movie_title,\r
+
+      \    -- year = the 4 chars starting 1 char after the last '('\r
+
+      \    substr(\r
+
+      \      title,\r
+
+      \      length(title) - position('(' IN reverse(title)) + 2,  -- start
+      index of the 4-digit year\r
+
+      \      4\r
+
+      \    ) AS year,\r
+
+      \    genres\r
+
+      FROM movies\r
+
+      -- optional: only for rows that contain '('\r
+
+      WHERE position('(' IN reverse(title)) > 0;\r
+
+      \r
+
+      SELECT * FROM movies_year LIMIT 20;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- to know how many movies are in each year\r
+
+      ALTER TABLE movies_year ALTER COLUMN year TYPE INTEGER;\r
+
+      \r
+
+      SELECT year, COUNT(*) FROM movies_year GROUP BY year ORDER BY year;\r\n"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What are the movies with the highest average rating?\r
+
+      CREATE OR REPLACE TABLE movie_ratings AS -- let's create a table with the
+      average movie ratings\r
+
+      SELECT movieID, AVG(rating) AS average_rating -- get movie id, and average
+      rating\r
+
+      FROM ratings\r
+
+      GROUP BY movieId -- group by the movie\r
+
+      ORDER BY average_rating; -- order by the average rating\r
+
+      \r
+
+      SELECT * FROM movie_ratings; -- see the table\r
+
+      \r
+
+      -- now, to get the titles we need the table movies\r
+
+      CREATE OR REPLACE TABLE summary_table AS\r
+
+      SELECT movie_ratings.movieId, movies_year.title, movies_year.movie_title,
+      movie_ratings.average_rating, movies_year.year\r
+
+      FROM movie_ratings\r
+
+      LEFT JOIN movies_year -- left join to keep all the records from
+      movie_ratings, and simply add the title from movies\r
+
+      ON movie_ratings.movieId = movies_year.movieID\r
+
+      ORDER BY year, average_rating DESC; -- get the best rated movies first\r
+
+      \r
+
+      SELECT * FROM summary_table LIMIT 20;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Get the average rating per year\r
+
+      SELECT year, AVG(average_rating)\r
+
+      FROM summary_table\r
+
+      GROUP BY year\r
+
+      ORDER BY AVG(average_rating) DESC;"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "# 5. Do older films have longer and more nostalgic comments?"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: Para fazer isto teríamos de alguma maneira de ir ao imdb buscar os
+      comentários, pois a table ratings só tem ratings de 1-5. Se alguém quiser
+      experimentar, força! Se não, não me importo de ficarmos com a parte
+      anterior (eu não vou ter tempo de fazer isto).
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: SELECT * FROM ratings LIMIT 20;
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "https://huggingface.co/tabularisai/multilingual-sentiment-analysis\r
+
+      este modelo talvez seja bom para sentiment analysis?"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- this exports all the database to the computer, so we can then use the
+      tables we created in Jupyter Notebook or VS Code, for instance\r
+
+      EXPORT DATABASE 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/BDF25_7_data/' (FORMAT parquet);"
+    metadata: {}
+metadata:
+  conn:
+    id: -89cs8OCqwHRwvBdX3Mf9
+    name: BDF_RMM_2
+  database: my_database
+  schema: main
