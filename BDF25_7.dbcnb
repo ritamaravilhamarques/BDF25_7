@@ -49,6 +49,36 @@ cells:
     metadata: {}
   - kind: 2
     languageId: sql
+    value: "/* First we'll import the MovieLens small datasets: links, movies,
+      ratings and tags\r
+
+      Here is where you can find them:
+      https://grouplens.org/datasets/movielens/\r
+
+      the small one:
+      https://files.grouplens.org/datasets/movielens/ml-latest-small.zip\r
+
+      extract the zip and replace the paths where needed */\r
+
+      \r
+
+      CREATE OR REPLACE TABLE tags AS\r
+
+      SELECT *\r
+
+      FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/ml-latest-small/tags.csv';\r
+
+      \r
+
+      SELECT *\r
+
+      FROM tags\r
+
+      LIMIT 20;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
     value: "CREATE OR REPLACE TABLE movies AS\r
 
       SELECT *\r
@@ -316,6 +346,10 @@ cells:
     metadata: {}
   - kind: 1
     languageId: markdown
+    value: "# 5. Most liked genre"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
     value: "# 5. Do older films have longer and more nostalgic comments?"
     metadata: {}
   - kind: 1
@@ -345,7 +379,7 @@ cells:
     metadata: {}
 metadata:
   conn:
-    id: -89cs8OCqwHRwvBdX3Mf9
-    name: BDF_RMM_2
+    id: -EkjKUnv5quOGl2PAGmbN
+    name: duckdb
   database: my_database
   schema: main
