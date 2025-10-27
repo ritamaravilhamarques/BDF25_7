@@ -346,11 +346,11 @@ cells:
     metadata: {}
   - kind: 1
     languageId: markdown
-    value: "# 5. Most liked genre"
+    value: "# 5. what are the most popular genres?"
     metadata: {}
   - kind: 1
     languageId: markdown
-    value: "# 5. Do older films have longer and more nostalgic comments?"
+    value: "# 6. Do older films have longer and more nostalgic comments?"
     metadata: {}
   - kind: 1
     languageId: markdown
@@ -377,9 +377,9 @@ cells:
       EXPORT DATABASE 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
       Foundations/Project/BDF25_7_data/' (FORMAT parquet);"
     metadata: {}
-metadata:
-  conn:
-    id: -EkjKUnv5quOGl2PAGmbN
-    name: duckdb
-  database: my_database
-  schema: main
+  - kind: 1
+    languageId: markdown
+    value: "# 7. Which Movies are the most controversial/ You either Love or Hate?
+      (highest rating variance)"
+    metadata: {}
+metadata: {}
