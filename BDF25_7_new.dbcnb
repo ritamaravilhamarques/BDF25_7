@@ -33,11 +33,9 @@ cells:
 
       SELECT *\r
 
-      --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/links.csv';\r
+      FROM 'BDF25_7_data/CSV Files/links.csv';\r
 
-      FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/links.csv';\r
+      \r
 
       \r
 
@@ -55,11 +53,7 @@ cells:
 
       SELECT *\r
 
-      --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/tags.csv';\r
-
-      FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/tags.csv';\r
+      FROM 'BDF25_7_data/CSV Files/tags.csv';\r
 
       \r
 
@@ -80,8 +74,7 @@ cells:
       --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
       Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/movies.csv';\r
 
-      FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/movies.csv';\r
+      FROM 'BDF25_7_data/CSV Files/movies.csv';\r
 
       \r
 
@@ -99,11 +92,7 @@ cells:
 
       SELECT *\r
 
-      --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/ml-latest-small/ratings.csv';\r
-
-      FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/ratings.csv';\r
+      FROM 'BDF25_7_data/CSV Files/ratings.csv';\r
 
       -- Timestamps represent seconds since midnight Coordinated Universal Time
       (UTC) of January 1, 1970.\r
@@ -471,7 +460,7 @@ cells:
     metadata: {}
 metadata:
   conn:
-    id: 843f1eea2d7004ab
+    id: 091cdc0f17bbc530
     name: movielens.duckdb
   database: movielens
   schema: main
