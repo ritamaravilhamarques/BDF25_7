@@ -29,3 +29,71 @@ The delivery will be through Moodle
 • Also in the.zip, a .CSV, with the name of the group, the student number and the name of each student of the group. The name of the .CSV is, simply, as in the previous exemple: GroupC.csv
 • Columns of the .CSV:
 • group letter, student number, student name
+
+
+💡 Proposta de questão de investigação
+
+	“Quais são os fatores (género, número de ratings, e popularidade) que mais influenciam a média de avaliação dos filmes no MovieLens?”
+
+Isto permite:
+	•	Explorar a estrutura e a distribuição dos dados (EDA);
+	•	Criar métricas derivadas (popularidade, número de votos, média ponderada);
+	•	Usar modelos simples (regressão linear / árvore de decisão) para quantificar o impacto de cada variável;
+	•	E escalar a análise — localmente em DuckDB, e facilmente replicável em cloud (Athena/BigQuery).
+
+⚙ 2. Pipeline analítico proposto
+
+🔹 Fase 1 – Preparação e EDA
+
+Objetivos:
+	•	Confirmar integridade dos dados.
+	•	Entender a distribuição de ratings e géneros.
+
+Passos:
+	1.	Carregar dados (DuckDB ou pandas).
+	2.	Calcular: •	nº total de utilizadores, filmes e avaliações •	distribuição de rating (média, mediana, desvio padrão) •	nº de filmes por género •	nº médio de ratings por filme e por utilizador
+	3.	Visualizar: •	histograma das classificações •	top 10 géneros mais avaliados •	relação entre nº de ratings e média por filme
+
+🔹 Fase 2 – Feature Engineering
+
+Criar novas variáveis:
+	•	n_ratings → nº de avaliações por filme
+	•	avg_rating → média de rating por filme
+	•	genre_count → nº de géneros atribuídos
+	•	popularity_score = log(1 + nº de ratings) × média (para normalizar popularidade)
+
+🔹 Fase 3 – Modelagem estatística / preditiva
+
+Objetivo: medir o peso de cada fator sobre a média de avaliação.
+
+Modelos possíveis:
+	•	Regressão Linear (OLS) → prever avg_rating com base em n_ratings, genre_count e dummies dos géneros principais.
+	•	Árvore de decisão / Random Forest → avaliar a importância relativa das variáveis.
+
+Métricas: R², RMSE, importância de features.
+
+🔹 Fase 4 – Visualização e interpretação
+	•	Gráficos:
+	•	Scatter n_ratings vs avg_rating (com tendência)
+	•	Boxplots de avg_rating por género
+	•	Importância das features no modelo
+	•	Insights:
+	•	Géneros com maiores médias
+	•	Géneros mais populares
+	•	Relação entre popularidade e qualidade percebida
+
+🔹 Fase 5 – Escalabilidade e Big Data
+	•	Executar as queries principais em DuckDB e exportar para Parquet.
+	•	Demonstrar (mesmo que parcialmente) a execução de consultas analíticas escaláveis:
+
+SELECT genre, COUNT(*) AS n_filmes, AVG(rating) AS avg_rating FROM ratings
+JOIN movies USING(movieId)
+GROUP BY genre;
+
+	•	Mostrar que a mesma lógica pode ser usada em Athena / BigQuery com datasets maiores (ex: MovieLens 25M).
+
+🔹 Fase 6 – Conclusão e futuras extensões
+	•	Identificar que fatores explicam melhor as boas avaliações.
+	•	Propor extensão:
+	•	Modelo preditivo por utilizador (colaborativo)
+	•	Integração com tags para enriquecer o conteúdo
