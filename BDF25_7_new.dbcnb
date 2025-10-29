@@ -1,0 +1,477 @@
+cells:
+  - kind: 1
+    languageId: markdown
+    value: “Quais são os fatores (género, número de ratings, e popularidade) que
+      mais influenciam a média de avaliação dos filmes no MovieLens?”
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "# 1. Data preparation and EDA"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: Load data
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "/* First we'll import the MovieLens small datasets: links, movies,
+      ratings and tags\r
+
+      Here is where you can find them:
+      https://grouplens.org/datasets/movielens/\r
+
+      the small one:
+      https://files.grouplens.org/datasets/movielens/ml-latest-small.zip\r
+
+      extract the zip and replace the paths where needed */\r
+
+      \r
+
+      -- Load table links\r
+
+      CREATE OR REPLACE TABLE links AS\r
+
+      SELECT *\r
+
+      --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/links.csv';\r
+
+      FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/links.csv';\r
+
+      \r
+
+      SELECT *\r
+
+      FROM links\r
+
+      LIMIT 10;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Load table tags\r
+
+      CREATE OR REPLACE TABLE tags AS\r
+
+      SELECT *\r
+
+      --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/tags.csv';\r
+
+      FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/tags.csv';\r
+
+      \r
+
+      SELECT *\r
+
+      FROM tags\r
+
+      LIMIT 20;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Load table movies\r
+
+      CREATE OR REPLACE TABLE movies AS\r
+
+      SELECT *\r
+
+      --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/movies.csv';\r
+
+      FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/movies.csv';\r
+
+      \r
+
+      SELECT *\r
+
+      FROM movies\r
+
+      LIMIT 10;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Load table ratings (the largest)\r
+
+      CREATE OR REPLACE TABLE ratings AS\r
+
+      SELECT *\r
+
+      --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/ml-latest-small/ratings.csv';\r
+
+      FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/ratings.csv';\r
+
+      -- Timestamps represent seconds since midnight Coordinated Universal Time
+      (UTC) of January 1, 1970.\r
+
+      \r
+
+      SELECT *\r
+
+      FROM ratings\r
+
+      LIMIT 10;"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "Calculate total number of:\r
+
+      - users\r
+
+      - movies\r
+
+      - ratings"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "SELECT COUNT(DISTINCT userId) FROM ratings; -- 200948\r
+
+      \r
+
+      SELECT COUNT(DISTINCT movieId) FROM movies; -- 87585\r
+
+      \r
+
+      --SELECT CONCAT(userId, '_', movieId) AS ratingId FROM ratings;\r
+
+      SELECT COUNT(DISTINCT userId, movieId) FROM ratings; --10"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: Rating distribution (mean, median, st dev) per movie
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Per-movie variability metrics (variance, stddev, % extreme ratings)\r
+
+      CREATE OR REPLACE TABLE movie_variability AS\r
+
+      SELECT\r
+
+      r.movieId,\r
+
+      m.title,\r
+
+      COUNT(*)                           AS n_ratings,\r
+
+      AVG(r.rating)                      AS avg_rating,\r
+
+      STDDEV_SAMP(r.rating)              AS std_rating,\r
+
+      VAR_SAMP(r.rating)                 AS var_rating,\r
+
+      AVG(CASE WHEN r.rating IN (1,5) THEN 1 ELSE 0 END) AS extreme_ratio,\r
+
+      --CAST(REGEXP_EXTRACT(m.title, '\\\\((\\\\d{4})\\\\)', 1) AS
+      INTEGER)          AS year,\r
+
+      --REGEXP_EXTRACT(m.genres, '^[^|]+',
+      0)                                  AS primary_genre,\r
+
+      REGEXP_EXTRACT(m.genres, '^[^|]+', 0)                                  AS
+      primary_genre,\r
+
+      m.genres\r
+
+      FROM ratings r\r
+
+      JOIN movies  m USING (movieId)\r
+
+      GROUP BY r.movieId, m.title, m.genres;\r
+
+      \r
+
+      SELECT * FROM movie_variability LIMIT 10;"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: Number of movies per genre
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What are the movie genres in the dataset?\r
+
+      SELECT DISTINCT genre -- distinct removes duplicates\r
+
+      FROM (\r
+
+      \    SELECT unnest(string_split(genres, '|')) AS genre \r
+
+      \    -- string_split turns \"Action|Comedy\" into an array ['Action',
+      'Comedy']\r
+
+      \    -- unnest explodes that array into separate rows\r
+
+      \    FROM movies\r
+
+      )\r
+
+      ORDER BY genre;"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What is the number of movies per genre?\r
+
+      CREATE OR REPLACE TABLE movies_per_genre AS\r
+
+      SELECT genre, COUNT(*) AS movie_count -- count counts how many movies
+      belong to each genre\r
+
+      FROM (\r
+
+      \    SELECT unnest(string_split(genres, '|')) AS genre\r
+
+      \    FROM movies\r
+
+      )\r
+
+      GROUP BY genre -- groups all rows by genre\r
+
+      ORDER BY movie_count DESC; -- shows most common genres first\r
+
+      \r
+
+      SELECT * FROM movies_per_genre;"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: Number of ratings per movie per user
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: ""
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: Ratings per genre
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- now, to get the titles we need the table movies\r
+
+      --SELECT movieId, title\r
+
+      --FROM movie_ratings\r
+
+      --LEFT JOIN movies -- left join to keep all the records from
+      movie_ratings, and simply add the title from movies\r
+
+      --ON movie_ratings.movieId = movies.movieID\r
+
+      --ORDER BY average_rating DESC; -- get the best rated movies first\r
+
+      \r
+
+      \r
+
+      -- Get the average rating per year\r
+
+      SELECT genres, AVG(avg_rating)\r
+
+      FROM movie_variability\r
+
+      GROUP BY genres\r
+
+      ORDER BY AVG(avg_rating) DESC;"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: ""
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- create a new table with movie_title and year extracted reliably\r
+
+      CREATE OR REPLACE TABLE movies_year AS\r
+
+      SELECT\r
+
+      \    movieId,\r
+
+      \    title,\r
+
+      \    -- movie title = all chars up to the char before the last '(' ; rtrim
+      removes trailing spaces\r
+
+      \    rtrim(substr(title, 1, length(title) - position('(' IN
+      reverse(title)))) AS movie_title,\r
+
+      \    -- year = the 4 chars starting 1 char after the last '('\r
+
+      \    substr(\r
+
+      \      title,\r
+
+      \      length(title) - position('(' IN reverse(title)) + 2,  -- start
+      index of the 4-digit year\r
+
+      \      4\r
+
+      \    ) AS year,\r
+
+      \    genres\r
+
+      FROM movies\r
+
+      -- optional: only for rows that contain '('\r
+
+      WHERE position('(' IN reverse(title)) > 0;\r
+
+      \r
+
+      SELECT * FROM movies_year LIMIT 20;"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: Which Movies are the most controversial/ You either Love or Hate?
+      (highest rating variance)
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "BL--> em termos de visualizaçao para esta pergunta poderiamos fazer:
+      graficos de barras dos top 10 + scatter plot com Avg rating/ desvio padrao
+      + box plot para analisar a distribuição"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Top 10 most controversial by variance (require at least 50 ratings)\r
+
+      CREATE OR REPLACE TABLE most_controversial AS\r
+
+      SELECT *\r
+
+      FROM movie_variability\r
+
+      WHERE n_ratings >= 50\r
+
+      ORDER BY var_rating DESC\r
+
+      LIMIT 10;\r
+
+      \ \r
+
+      -- Preview\r
+
+      SELECT movieId, title, n_ratings, avg_rating, std_rating, var_rating,
+      extreme_ratio\r
+
+      FROM most_controversial;\r
+
+      \ \r
+
+      \ \r
+
+      \ \r
+
+      --bar chart top 10\r
+
+      -- !pip install matplotlib -- colocar no inicio\r
+
+      \ \r
+
+      import matplotlib.pyplot as plt\r
+
+      \ \r
+
+      df_bar = con.execute(\"\"\"\r
+
+      SELECT title, n_ratings, avg_rating, std_rating, var_rating\r
+
+      FROM most_controversial\r
+
+      ORDER BY var_rating DESC\r
+
+      \"\"\").df()\r
+
+      \ \r
+
+      plt.figure(figsize=(10,6))\r
+
+      plt.barh(df_bar['title'], df_bar['var_rating'])\r
+
+      plt.gca().invert_yaxis()\r
+
+      plt.xlabel('Rating variance')\r
+
+      plt.title('Top 10 Most Controversial Movies (variance, n>=50)')\r
+
+      plt.tight_layout()\r
+
+      plt.show()\r
+
+      \ \r
+
+      \ \r
+
+      \ \r
+
+      Scatter plot\r
+
+      df_scatter = con.execute(\"\"\"\r
+
+      SELECT title, avg_rating, std_rating, n_ratings, primary_genre\r
+
+      FROM movie_variability\r
+
+      WHERE n_ratings >= 50\r
+
+      \"\"\").df()\r
+
+      \ \r
+
+      plt.figure(figsize=(9,6))\r
+
+      scatter = plt.scatter(\r
+
+      \    df_scatter['avg_rating'],\r
+
+      \    df_scatter['std_rating'],\r
+
+      \    s=df_scatter['n_ratings']*0.3,     # scale bubble size\r
+
+      \    c=df_scatter['n_ratings'],         # color by popularity\r
+
+      \    alpha=0.6)\r
+
+      plt.xlabel('Average rating')\r
+
+      plt.ylabel('Standard deviation of ratings')\r
+
+      plt.title('Controversial Movies: Avg Rating vs Std Dev (bubble =
+      #ratings)')\r
+
+      cbar = plt.colorbar(scatter)\r
+
+      cbar.set_label('#ratings')\r
+
+      plt.grid(True, alpha=0.2)\r
+
+      plt.tight_layout()\r
+
+      plt.show()\r
+
+      \ \r
+
+      --label the top outliers in the scatter plot\r
+
+      outliers = df_scatter.nlargest(5, 'std_rating')\r
+
+      for _, row in outliers.iterrows():\r
+
+      \    plt.annotate(row['title'][:28] + ('…' if len(row['title'])>28 else
+      ''),\r
+
+      \                 (row['avg_rating'], row['std_rating']),\r
+
+      \                 xytext=(5,5), textcoords='offset points', fontsize=8)"
+    metadata: {}
+metadata:
+  conn:
+    id: 843f1eea2d7004ab
+    name: movielens.duckdb
+  database: movielens
+  schema: main

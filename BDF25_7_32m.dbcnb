@@ -37,10 +37,10 @@ cells:
       SELECT *\r
 
       --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/ml-latest-small/links.csv';\r
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/links.csv';\r
 
       FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/ml-latest-small/links.csv';\r
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/links.csv';\r
 
       \r
 
@@ -70,10 +70,10 @@ cells:
       SELECT *\r
 
       --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/ml-latest-small/tags.csv';\r
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/tags.csv';\r
 
       FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/ml-latest-small/tags.csv';\r
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/tags.csv';\r
 
       \r
 
@@ -90,10 +90,10 @@ cells:
       SELECT *\r
 
       --FROM 'C:/Users/RitaML/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/ml-latest-small/movies.csv';\r
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/movies.csv';\r
 
       FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/ml-latest-small/movies.csv';\r
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/movies.csv';\r
 
       \r
 
@@ -113,7 +113,7 @@ cells:
       Foundations/Project/ml-latest-small/ratings.csv';\r
 
       FROM 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/ml-latest-small/ratings.csv';\r
+      Foundations/Project/BDF25_7/BDF25_7_data/big_data/ml-32m/ratings.csv';\r
 
       \r
 
@@ -390,7 +390,7 @@ cells:
       Foundations/Project/BDF25_7_data/' (FORMAT parquet);\r
 
       EXPORT DATABASE 'C:/Users/Rita/OneDrive - NOVAIMS/EDSA/7_Big Data
-      Foundations/Project/BDF25_7_data/' (FORMAT parquet);"
+      Foundations/Project/BDF25_7_data_32m/' (FORMAT parquet);"
     metadata: {}
   - kind: 1
     languageId: markdown
