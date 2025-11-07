@@ -1,3 +1,4 @@
 movielens.duckdb
 movielens.duckdb.wal
 movielens.duckdb
+big_data/ml-32m/data/*.parquet
