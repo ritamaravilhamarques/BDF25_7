@@ -2,3 +2,11 @@ movielens.duckdb
 movielens.duckdb.wal
 movielens.duckdb
 big_data/ml-32m/data/*.parquet
+.DS_Store
+BDF25_7_data/.DS_Store
+BDF25_7_data/big_data/.DS_Store
+BDF25_7_data/big_data/ml-32m/data/links_32m.parquet
+BDF25_7_data/big_data/ml-32m/data/movies_32m.parquet
+BDF25_7_data/big_data/ml-32m/data/ratings_32m.parquet
+BDF25_7_data/big_data/ml-32m/data/tags_32m.parquet
+BDF25_7_data/big_data/.DS_Store
