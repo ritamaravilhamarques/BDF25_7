@@ -10,3 +10,5 @@ BDF25_7_data/big_data/ml-32m/data/movies_32m.parquet
 BDF25_7_data/big_data/ml-32m/data/ratings_32m.parquet
 BDF25_7_data/big_data/ml-32m/data/tags_32m.parquet
 BDF25_7_data/big_data/.DS_Store
+BDF25_7_data/big_data/ml-32m/title.basics.tsv
+BDF25_7_data/big_data/ml-32m/title.basics.tsv.gz
