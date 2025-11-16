@@ -1,0 +1,21 @@
+1. Create the virtual environment 'venv'
+python -m venv venv
+# or:
+python3 -m venv venv
+
+
+2. Activate the virtual environment
+
+2.1. on Windows (PowerShell)
+venv\Scripts\activate
+
+2.2.on macOS/Linux
+source venv/bin/activate
+
+3. pip install -r requirements.txt
+
+
+4. Create an .env file to store the aws credentials. This file is on git ignore
+aws_access_key_id=...
+aws_secret_access_key= ...
+aws_session_token=...

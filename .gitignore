@@ -1,7 +1,15 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.vscode/
+.python-version
+.env
 movielens.duckdb
 movielens.duckdb.wal
 movielens.duckdb
 big_data/ml-32m/data/*.parquet
+big_data/ml-32m/data/*.tsv
 .DS_Store
 BDF25_7_data/.DS_Store
 BDF25_7_data/big_data/.DS_Store
