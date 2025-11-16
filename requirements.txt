@@ -1,0 +1,10 @@
+polars
+pandas
+duckdb
+gdown
+matplotlib
+seaborn
+pyarrow
+boto3
+pyathena
+python-dotenv
