@@ -13,3 +13,6 @@ BDF25_7_data/big_data/.DS_Store
 BDF25_7_data/big_data/ml-32m/title.basics.tsv
 BDF25_7_data/big_data/ml-32m/title.basics.tsv.gz
 BDF25_7_data/big_data/ml-32m/data/title.basics.tsv
+BDF25_7_data/big_data/Plots
+BDF25_7\BDF25_7_data\CSV Files
+BDF25_7\BDF25_7_data\Parquet Files
